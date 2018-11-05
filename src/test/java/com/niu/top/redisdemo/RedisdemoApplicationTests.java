@@ -11,6 +11,7 @@ public class RedisdemoApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println();
     }
 
 }

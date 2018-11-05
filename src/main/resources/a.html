@@ -1,0 +1,91 @@
+// 退款订单列表
+var refundOrderList=function(){
+
+var ag;
+
+//资源模块ID
+var rescid=cis_base_resources.getRescid("refundOrder_list");
+//自动表格ID
+var gridId=cis_base_resources.getAutoGrid("cis_refundOrder_mian_list");
+
+
+$(document).ready(function () {
+refundOrderList.initForm();
+});
+
+return{
+initForm:function(){
+
+var cssPanel = new CssPanel();
+cssPanel.setParams(rescid,"header","queryPanel");
+cssPanel.renderPanel("queryPanel","查询条件");
+
+cssPanel.setParams(rescid,"header","headGridPanel");
+cssPanel.renderPanel("headGridPanel","空气治理订单列表");
+
+ag=new AutoGrid();
+
+var gridFormat=[{
+columnMark:"order_id",
+formatCodeBefore:'< a href=" " >',
+formatCodeStyle:'text-decoration:underline;color:blue;',
+formatClickFunc:'refundOrderList.openDeatil',
+formatCodeParams:"order_id",
+formatCodeAfter:'</ a>'
+}];
+
+ag.gridColumnFormat(gridFormat);
+
+//初始化头表格
+ag.initConfig(gridId);
+//渲染查询表格
+ag.randerForm("queryForm","headGrid");
+//渲染头grid
+ag.randerGridByCode("headGrid");
+
+},
+
+//查询按钮
+btnQuery:function(pageIndex,pageSize){
+ag.queryData(true);
+},
+
+//重置按钮
+btnReset:function(){
+$("#queryForm").form('clear');
+},
+
+//高级查询按钮
+btnAdvQuery:function(){
+ag.advanceBtn();
+},
+
+//导出按钮
+exportGrid:function(){
+eventPlugin.cusServerExport("cis_refundOrder_mian_list","tab");
+},
+
+//刷新当前页
+refreshCurPage:function(){
+ag.revertPaginationFn(false);
+ag.queryData();
+ag.revertPaginationFn(true);
+},
+
+/** '通过'按钮 */
+btnPass:function(){
+var rows = $('#headGrid').datagrid('getSelections');
+
+if (rows.length > 1 || rows.length == 0) {
+$.messager.alert('提示','请选择一行记录进行操作。','warning');
+return false;
+}
+var orderId = rows[0].order_id;				// 订单编码
+var refundStatus = rows[0].refund_status; 	//状态
+
+if(refundStatus!='1'){
+midea_msg_lib.tips("提示", "只有【待审核】状态才能进行此操作！", "error");
+return false;
+}
+
+midea_msg_lib.confirm("操作提示","审核需谨慎，确认通过订单【"+rows[0].orde
