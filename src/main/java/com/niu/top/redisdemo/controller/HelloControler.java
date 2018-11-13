@@ -1,4 +1,4 @@
-package com.niu.top.redisdemo.controler;
+package com.niu.top.redisdemo.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
